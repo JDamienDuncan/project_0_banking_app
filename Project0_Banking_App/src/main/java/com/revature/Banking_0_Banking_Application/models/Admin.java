@@ -20,7 +20,7 @@ public class Admin extends User{
 	public void editAccount() {
 		System.out.println("\n----------------------------------------\n");
 		
-		System.out.print("Enter Target Account ID: ");
+		System.out.println("Needs to be implemented.");
 		
 		
 		System.out.println("\n----------------------------------------\n");
@@ -63,18 +63,18 @@ public class Admin extends User{
 					
 					
 				}catch(NumberFormatException e){
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 					fileLogger.debug(e.getMessage());
 				
 				}
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 			
 		}
@@ -133,18 +133,18 @@ public class Admin extends User{
 					
 					
 				}catch(NumberFormatException e){
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 					fileLogger.debug(e.getMessage());
 				
 				}
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 			
 		}
@@ -174,16 +174,18 @@ public class Admin extends User{
 					System.out.println("Username = "+set.getString(3));
 					System.out.println("Account Type: Customer");
 					System.out.println("Email: "+set.getString(7));
+				}else {
+					System.out.println("Entered ID is not valid.\n");
 				}
 				
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Entered ID is not valid.\n");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Entry is invalid. Enter valid entry. ");
 			fileLogger.debug(e.getMessage());
 			
 		}
@@ -202,7 +204,7 @@ public class Admin extends User{
 		String temp;
 		System.out.println("\n----------------------------------------\n");
 		
-		System.out.println("Enter account ID to be Deleted:");
+		System.out.print("Enter account ID to be Deleted:");
 		try {
 			choice = Integer.valueOf(sc.nextLine());
 			
@@ -223,15 +225,12 @@ public class Admin extends User{
 				
 				statement.executeUpdate(finalSql);
 				
-				
-				System.out.print("Please select the username of declined account or none: ");
-				
 				}catch (SQLException e) {
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("Invalid username entered. Enter valid entry.");
 					fileLogger.debug(e.getMessage());
 				}
 		}catch(NumberFormatException e) {
-				consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		

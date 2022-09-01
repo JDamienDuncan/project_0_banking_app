@@ -53,10 +53,10 @@ public class Driver {
 					
 				}else {
 					// Invalid Entry Path
-					System.out.println("Invalid Entry! Please select again!");
+					System.out.println("\nInvalid Entry! Please select again!\n");
 				}
 			} catch(NumberFormatException e) {
-				System.out.println("Invalid Entry! Please select again!");
+				System.out.println("\nInvalid Entry! Please select again!\n");
 			}
 			
 		}

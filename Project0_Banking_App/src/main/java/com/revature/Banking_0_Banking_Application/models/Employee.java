@@ -38,13 +38,13 @@ public class Employee extends User {
 				}
 				
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 		}
 		
@@ -89,18 +89,18 @@ public class Employee extends User {
 					
 					
 				}catch(NumberFormatException e){
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 					fileLogger.debug(e.getMessage());
 				
 				}
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 			
 		}
@@ -159,18 +159,18 @@ public class Employee extends User {
 					
 					
 				}catch(NumberFormatException e){
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 					fileLogger.debug(e.getMessage());
 				
 				}
 			} catch (SQLException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 			
 		}

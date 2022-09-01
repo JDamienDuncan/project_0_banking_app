@@ -33,7 +33,7 @@ public class Customer extends User{
 				System.out.println();
 			}
 		} catch (SQLException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("There was an issue checking the balance...");
 			fileLogger.debug(e.getMessage());
 		}
 		
@@ -64,7 +64,7 @@ public class Customer extends User{
 				try(Statement statement = connection.connection.createStatement();){
 					statement.executeUpdate(withdrawSql);				
 				} catch (SQLException e) {
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("There was an issue withdrawing...");
 					fileLogger.debug(e.getMessage());
 					
 				}
@@ -76,7 +76,7 @@ public class Customer extends User{
 				System.out.println("\n----------------------------------------\n");
 			}
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid Entry. Please enter proper value.\n");
 			fileLogger.debug(e.getMessage());
 			System.out.println("\n----------------------------------------\n");
 			temp =  0;
@@ -111,7 +111,7 @@ public class Customer extends User{
 					System.out.println(temp);
 					statement.executeUpdate(depositSql);				
 				} catch (SQLException e) {
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("There was an issue depositing...");
 					fileLogger.debug(e.getMessage());
 					
 				}
@@ -121,7 +121,7 @@ public class Customer extends User{
 				System.out.println("Invalid entry detected. Please Enter valid amount.");
 			}
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid Entry. Please enter proper value.\n");
 			fileLogger.debug(e.getMessage());
 		}
 			
@@ -152,7 +152,7 @@ public class Customer extends User{
 					statement.executeUpdate(transferSql);
 					statement.executeUpdate(balanceSql);
 				} catch (SQLException e) {
-					consoleLogger.debug(e.getMessage());
+					consoleLogger.debug("");
 					fileLogger.debug(e.getMessage());
 					
 				}
@@ -161,7 +161,7 @@ public class Customer extends User{
 			
 			
 		}catch(NumberFormatException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 			fileLogger.debug(e.getMessage());
 		}
 		
@@ -223,7 +223,7 @@ public class Customer extends User{
 				}
 				
 			}catch(NumberFormatException e) {
-				consoleLogger.debug(e.getMessage());
+				consoleLogger.debug("Invalid entry entered. Enter valid entry.");
 				fileLogger.debug(e.getMessage());
 			}
 		}

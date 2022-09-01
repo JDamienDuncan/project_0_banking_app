@@ -41,66 +41,83 @@ public class UserDao implements UserDaoInterface{
 		
 		// Get user input to create new user
 		System.out.println("Please Enter the needed information for your new account.\n");
-		
-		System.out.print("Enter your First Name: ");
-		fname = sc.nextLine();
-		
-		System.out.print("Enter your Last Name: ");
-		lname = sc.nextLine();
-		
-		System.out.print("Enter your email: ");
-		email = sc.nextLine();
-		
-		System.out.print("Enter a Username: ");
-		usern = sc.nextLine();
-		
-		System.out.print("Enter a Password: ");
-		passw = sc.nextLine();
-		
-		System.out.print("Enter your Age: ");
-		age = sc.nextInt();
-		
-		newUser = new Customer(usern, passw, email, fname, lname, age, 0);
-		newUser.setUser_id(id);
-		
-		final String sql = "INSERT INTO user_types VALUES ('"+newUser.getUser_id()+"', '"+type+"');";
-		final String sql1 = "INSERT INTO customers VALUES ('"+newUser.getUser_id()+"', '"+balance+"', '"+newUser.getLname()+"');";
-		final String sql4 = " INSERT INTO customer_status VALUES('"+newUser.getUsername()+"', '"+"Pending"+"', '"+newUser.getUsername()+"');";
-		final String sql2 = "INSERT INTO users "
-				+ "	VALUES('"+lname+"', '"+fname+"',"
-						+ " '"+usern+"', '"+passw+"', '"+age+"', '"+id+"', '"+email+"');";
-		
-		final String sql3 = sql + sql2 + sql1 + sql4;
-		
-		
-		// Return newUser
-		//System.out.println(newUser.getUser_id());
-		try(Statement statement = connection.connection.createStatement();){
+		try {
+			System.out.print("Enter your First Name: ");
+			fname = sc.nextLine();
 			
-			statement.executeUpdate(sql3);
+			System.out.print("Enter your Last Name: ");
+			lname = sc.nextLine();
 			
-		} catch (SQLException e) {
-			consoleLogger.debug(e.getMessage());
+			System.out.print("Enter your email: ");
+			email = sc.nextLine();
+			
+			System.out.print("Enter a Username: ");
+			usern = sc.nextLine();
+			
+			System.out.print("Enter a Password: ");
+			passw = sc.nextLine();
+			
+			System.out.print("Enter your Age: ");
+			age = sc.nextInt();
+		
+			newUser = new Customer(usern, passw, email, fname, lname, age, 0);
+			newUser.setUser_id(id);
+		
+			final String sql = "INSERT INTO user_types VALUES ('"+newUser.getUser_id()+"', '"+type+"');";
+			final String sql1 = "INSERT INTO customers VALUES ('"+newUser.getUser_id()+"', '"+balance+"', '"+newUser.getLname()+"');";
+			final String sql4 = " INSERT INTO customer_status VALUES('"+newUser.getUsername()+"', '"+"Pending"+"', '"+newUser.getLname()+"');";
+			final String sql2 = "INSERT INTO users "
+					+ "	VALUES('"+lname+"', '"+fname+"',"
+							+ " '"+usern+"', '"+passw+"', '"+age+"', '"+id+"', '"+email+"');";
+			
+			final String sql3 = sql + sql2 + sql1 + sql4;
+			
+			
+			// Return newUser
+			//System.out.println(newUser.getUser_id());
+			try(Statement statement = connection.connection.createStatement();){
+				
+				statement.executeUpdate(sql3);
+				System.out.println("\nYour account has been created!\n");
+				System.out.println("----------------------------------------\n");
+				return newUser;
+			}catch (SQLException e) {
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
+				
+			}
+		} catch(NumberFormatException e) {
+			consoleLogger.debug("Invalid data entry, please enter proper values.\n");
 			fileLogger.debug(e.getMessage());
-			
+			return null;
 		}
-		
-		System.out.println("\nYour account has been created!\n");
-		System.out.println("----------------------------------------\n");
 		return newUser;
+		
 	}
 
 	@Override
 	public User getUser(String username, String password) {
-		
+		User user;
+		String lname, fname, usern, passw, email;
+		int age,id;
 		final String sql = "Select * FROM users WHERE username = '"+username+"';";
 		
 		try(Statement statement = this.connection.connection.createStatement();){
 			ResultSet set = statement.executeQuery(sql);
 			if(set.next()) {
+				lname = set.getString(1);
+				fname = set.getString(2);
+				usern = set.getString(3);
+				passw = set.getString(4);
+				age = set.getInt(5);
+				id = set.getInt(6);
+				email = set.getString(7);
+				user = new Customer(usern, passw, email, fname, lname, age, 0);
+				user.setUser_id(id);
+				return user;
 			}
 		} catch (SQLException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid username or password.\n");
 			fileLogger.debug(e.getMessage());
 			
 		}
@@ -111,8 +128,7 @@ public class UserDao implements UserDaoInterface{
 
 	@Override
 	public User updatedUser(User newUser) {
-		
-		return null;
+		return newUser;
 	}
 
 	@Override
@@ -127,10 +143,10 @@ public class UserDao implements UserDaoInterface{
 		
 		try(Statement statement = connection.connection.createStatement();) {
 			statement.executeQuery(finalSql);
-			System.out.println("The account has been deleted!");
+			System.out.println("The account has been deleted!\n");
 			
 		}catch(SQLException e) {
-			consoleLogger.debug(e.getMessage());
+			consoleLogger.debug("Invalid target for deletion.\n");
 			fileLogger.debug(e.getMessage());
 		}
 		
