@@ -10,8 +10,6 @@ import java.util.Scanner;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.revature.Banking_0_Banking_Application.controller.UserController;
 import com.revature.Banking_0_Banking_Application.models.Customer;
 import com.revature.Banking_0_Banking_Application.models.User;
 import com.revature.Banking_0_Banking_Application.services.DatabaseConnection;
@@ -94,7 +92,6 @@ public class UserDao implements UserDaoInterface{
 
 	@Override
 	public User getUser(String username, String password) {
-		User user = null;
 		
 		final String sql = "Select * FROM users WHERE username = '"+username+"';";
 		

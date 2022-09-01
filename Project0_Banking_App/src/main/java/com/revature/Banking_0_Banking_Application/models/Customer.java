@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import org.slf4j.LoggerFactory;
 
 public class Customer extends User{
 	
@@ -34,8 +33,8 @@ public class Customer extends User{
 				System.out.println();
 			}
 		} catch (SQLException e) {
-			consoleLogger = LoggerFactory.getLogger("consoleLogger");
-			fileLogger = LoggerFactory.getLogger("fileLogger");
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 		}
 		
 		System.out.println("\n----------------------------------------\n");
@@ -65,8 +64,8 @@ public class Customer extends User{
 				try(Statement statement = connection.connection.createStatement();){
 					statement.executeUpdate(withdrawSql);				
 				} catch (SQLException e) {
-					consoleLogger = LoggerFactory.getLogger("consoleLogger");
-					fileLogger = LoggerFactory.getLogger("fileLogger");
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
 					
 				}
 			}else if(temp > balance) {
@@ -77,8 +76,8 @@ public class Customer extends User{
 				System.out.println("\n----------------------------------------\n");
 			}
 		}catch(NumberFormatException e) {
-			consoleLogger = LoggerFactory.getLogger("consoleLogger");
-			fileLogger = LoggerFactory.getLogger("fileLogger");
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 			System.out.println("\n----------------------------------------\n");
 			temp =  0;
 		}
@@ -112,8 +111,8 @@ public class Customer extends User{
 					System.out.println(temp);
 					statement.executeUpdate(depositSql);				
 				} catch (SQLException e) {
-					consoleLogger = LoggerFactory.getLogger("consoleLogger");
-					fileLogger = LoggerFactory.getLogger("fileLogger");
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
 					
 				}
 			}else if(temp <= 0) {
@@ -122,8 +121,8 @@ public class Customer extends User{
 				System.out.println("Invalid entry detected. Please Enter valid amount.");
 			}
 		}catch(NumberFormatException e) {
-			consoleLogger = LoggerFactory.getLogger("consoleLogger");
-			fileLogger = LoggerFactory.getLogger("fileLogger");
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 		}
 			
 		
@@ -153,8 +152,8 @@ public class Customer extends User{
 					statement.executeUpdate(transferSql);
 					statement.executeUpdate(balanceSql);
 				} catch (SQLException e) {
-					consoleLogger = LoggerFactory.getLogger("consoleLogger");
-					fileLogger = LoggerFactory.getLogger("fileLogger");
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
 					
 				}
 				
@@ -162,8 +161,8 @@ public class Customer extends User{
 			
 			
 		}catch(NumberFormatException e) {
-			consoleLogger = LoggerFactory.getLogger("consoleLogger");
-			fileLogger = LoggerFactory.getLogger("fileLogger");
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 		}
 		
 		System.out.println("\n----------------------------------------\n");
@@ -224,8 +223,8 @@ public class Customer extends User{
 				}
 				
 			}catch(NumberFormatException e) {
-				consoleLogger = LoggerFactory.getLogger("consoleLogger");
-				fileLogger = LoggerFactory.getLogger("fileLogger");
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
 			}
 		}
 	}

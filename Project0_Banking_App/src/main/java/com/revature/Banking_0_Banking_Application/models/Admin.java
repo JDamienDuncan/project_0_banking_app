@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import org.slf4j.LoggerFactory;
-
 public class Admin extends User{
 	
 	private Scanner sc;
@@ -29,9 +27,136 @@ public class Admin extends User{
 		
 	}
 	
+	public void acceptAccount() {
+		String choice;
+		System.out.println("\n----------------------------------------\n");
+		
+
+		System.out.println("Displaying Pending Users:");
+		try {
+			String sql = "SELECT * from customer_status where customer_status = '"+"Pending"+"';";
+			
+			try(Statement statement = connection.connection.createStatement();){
+				ResultSet set = statement.executeQuery(sql);
+				
+				if(set.next()) {
+					System.out.println("Username: "+set.getString(1));
+					System.out.println("Status: "+set.getString(2));
+					System.out.println("Last Name: "+set.getString(3));
+					System.out.println();
+					while(set.next()) {
+							System.out.println("Username: "+set.getString(1));
+							System.out.println("Status: "+set.getString(2));
+							System.out.println("Last Name: "+set.getString(3));
+							System.out.println();
+					}
+				}else {
+					System.out.println("\nNo More Current Pending Accounts.\n");
+				}
+				
+				System.out.print("Please select the username of accepted account or none: ");
+				try {
+					choice = String.valueOf(sc.nextLine());
+					String sql2 = "update customer_status set customer_status = '"+"Accepted"+"' where username = '"+choice+"';";
+					statement.executeUpdate(sql2);
+					System.out.println("\nAccount status has been changed to accepted.\n");
+					
+					
+				}catch(NumberFormatException e){
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
+				
+				}
+			} catch (SQLException e) {
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
+			}
+		
+		
+		}catch(NumberFormatException e) {
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
+			
+		}
+		
+		
+		System.out.println("\n----------------------------------------\n");
+		
+	}
+	
+	// Decline a new customer account
+	public void declineAccount() {
+		String choice;
+		System.out.println("\n----------------------------------------\n");
+		
+
+		System.out.println("Displaying Pending Users:");
+		try {
+			String sql = "SELECT * from customer_status where customer_status = '"+"Pending"+"';";
+			
+			try(Statement statement = connection.connection.createStatement();){
+				ResultSet set = statement.executeQuery(sql);
+				
+				if(set.next()) {
+					System.out.println("Username: "+set.getString(1));
+					System.out.println("Status: "+set.getString(2));
+					System.out.println("Last Name: "+set.getString(3));
+					System.out.println();
+					while(set.next()) {
+							System.out.println("Username: "+set.getString(1));
+							System.out.println("Status: "+set.getString(2));
+							System.out.println("Last Name: "+set.getString(3));
+							System.out.println();
+					}
+				}else {
+					System.out.println("\nNo More Current Pending Accounts.\n");
+				}
+				
+				System.out.print("Please select the username of declined account or none: ");
+				try {
+					choice = String.valueOf(sc.nextLine());
+					
+					set = statement.executeQuery("select user_id from users where username = '"+choice+"';");
+					
+					set.next();
+					int temp = set.getInt(1);
+					
+					
+					final String sql0 = "DELETE from customer_status where username = '"+choice+"';";
+					final String sql1 = "DELETE from customers where user_id1 = '"+temp+"';";
+					final String sql2 = "DELETE from users where user_id = '"+temp+"';";
+					final String sql3 = "DELETE from user_types where user_id = '"+temp+"';";
+					final String finalSql = sql0 + sql1 + sql2 + sql3;
+					
+					statement.executeUpdate(finalSql);
+					System.out.println("\nAccount has been changed to declined and deleted.\n");
+					
+					
+				}catch(NumberFormatException e){
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
+				
+				}
+			} catch (SQLException e) {
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
+			}
+		
+		
+		}catch(NumberFormatException e) {
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
+			
+		}
+		
+		
+		System.out.println("\n----------------------------------------\n");
+		
+	}
+	
 	// View a specific account
 	public void viewAccount() {
-int choice;
+		int choice;
 		
 		System.out.println("\n----------------------------------------\n");
 		
@@ -52,14 +177,14 @@ int choice;
 				}
 				
 			} catch (SQLException e) {
-				consoleLogger = LoggerFactory.getLogger("consoleLogger");
-				fileLogger = LoggerFactory.getLogger("fileLogger");
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
 			}
 		
 		
 		}catch(NumberFormatException e) {
-			consoleLogger = LoggerFactory.getLogger("consoleLogger");
-			fileLogger = LoggerFactory.getLogger("fileLogger");
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 			
 		}
 		
@@ -73,30 +198,52 @@ int choice;
 	
 	// Delete a selected account
 	public void deleteAccount() {
+		int choice;
+		String temp;
 		System.out.println("\n----------------------------------------\n");
 		
-		System.out.print("Enter Target Account ID: ");
+		System.out.println("Enter account ID to be Deleted:");
+		try {
+			choice = Integer.valueOf(sc.nextLine());
+			
+			try(Statement statement = connection.connection.createStatement();){
+				
+				String sql = "select username from users where user_id = '"+choice+"';";
+				ResultSet set = statement.executeQuery(sql);
+				
+				set.next();
+				temp = set.getString(1);
+				
+				
+				final String sql0 = "DELETE from customer_status where username = '"+temp+"';";
+				final String sql1 = "DELETE from customers where user_id = '"+choice+"';";
+				final String sql2 = "DELETE from users where user_id = '"+choice+"';";
+				final String sql3 = "DELETE from user_types where user_id = '"+choice+"';";
+				final String finalSql = sql0 + sql1 + sql2 + sql3;
+				
+				statement.executeUpdate(finalSql);
+				
+				
+				System.out.print("Please select the username of declined account or none: ");
+				
+				}catch (SQLException e) {
+					consoleLogger.debug(e.getMessage());
+					fileLogger.debug(e.getMessage());
+				}
+		}catch(NumberFormatException e) {
+				consoleLogger.debug(e.getMessage());
+				fileLogger.debug(e.getMessage());
+			}
 		
 		
 		System.out.println("\n----------------------------------------\n");
 		
-	}
+		}
+		
+	
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	 // Admin Account information
+	// Admin Account information
 	public void viewAcc() {
 		System.out.println("\n----------------------------------------\n");
 		
@@ -114,7 +261,6 @@ int choice;
 	// Main Admin Driver
 	public void mainDriver() {
 		boolean banking = true;
-		Scanner sc = new Scanner(System.in);
 		int choice;
 		
 		while(banking) {
@@ -122,8 +268,10 @@ int choice;
 			System.out.println("1: Edit Account");
 			System.out.println("2: View an Account");
 			System.out.println("3: Delete an Account");
-			System.out.println("4: View Account Information");
-			System.out.println("5: Log Out");
+			System.out.println("4: Accept New Account");
+			System.out.println("5: Decline New Account");
+			System.out.println("6: View Account Information");
+			System.out.println("7: Log Out");
 			System.out.print("Please select a numbered option: ");
 			choice = Integer.valueOf(sc.nextLine());
 			
@@ -134,8 +282,12 @@ int choice;
 			}else if(choice == 3) {
 				this.deleteAccount();
 			}else if(choice == 4) {
-				this.viewAcc();
+				this.acceptAccount();
 			}else if(choice == 5) {
+				this.declineAccount();
+			}else if(choice == 6) {
+				this.viewAcc();
+			}else if(choice == 7) {
 				banking = false;
 				System.out.println("\n----------------------------------------\n");
 				System.out.println("\nLogged Out!\n");
