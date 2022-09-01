@@ -8,22 +8,36 @@ import java.sql.Statement;
 import java.util.Random;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revature.Banking_0_Banking_Application.controller.UserController;
 import com.revature.Banking_0_Banking_Application.models.Customer;
 import com.revature.Banking_0_Banking_Application.models.User;
 import com.revature.Banking_0_Banking_Application.services.DatabaseConnection;
 
 public class UserDao implements UserDaoInterface{
-	private Scanner sc = new Scanner(System.in);
-	private DatabaseConnection connection= new DatabaseConnection();
-	private Random r = new Random();
+	
+	private Scanner sc;
+	private DatabaseConnection connection;
+	private Random r;
+	public Logger consoleLogger;
+	public Logger fileLogger;
+	
+	public UserDao() {
+		consoleLogger = LoggerFactory.getLogger("consoleLogger");
+		fileLogger = LoggerFactory.getLogger("fileLogger");
+		connection= new DatabaseConnection();
+		sc = new Scanner(System.in);
+		r = new Random();
+	}
 
 	@Override
 	public User createdUser(User newUser) {
 		// Create needed variables
 		String lname, fname, usern, passw, email;
 		String type = "Customer";
-		int id = r.nextInt(5000,5) + 5;
+		int id = r.nextInt(10000-5) + 5;
 	    float balance = (float) 0.00;
 		int age;
 		
@@ -49,27 +63,32 @@ public class UserDao implements UserDaoInterface{
 		age = sc.nextInt();
 		
 		newUser = new Customer(usern, passw, email, fname, lname, age, 0);
+		newUser.setUser_id(id);
 		
 		final String sql = "INSERT INTO user_types VALUES ('"+newUser.getUser_id()+"', '"+type+"');";
-		final String sql1 = "INSERT INTO customers VALUES ('"+balance+"', '"+newUser.getUser_id()+"');";
+		final String sql1 = "INSERT INTO customers VALUES ('"+newUser.getUser_id()+"', '"+balance+"', '"+newUser.getLname()+"');";
+		final String sql4 = " INSERT INTO customer_status VALUES('"+newUser.getUsername()+"', '"+"Pending"+"', '"+newUser.getUsername()+"');";
 		final String sql2 = "INSERT INTO users "
 				+ "	VALUES('"+lname+"', '"+fname+"',"
 						+ " '"+usern+"', '"+passw+"', '"+age+"', '"+id+"', '"+email+"');";
-		final String sql3 = sql + sql1 + sql2;
+		
+		final String sql3 = sql + sql2 + sql1 + sql4;
+		
 		
 		// Return newUser
-		
+		//System.out.println(newUser.getUser_id());
 		try(Statement statement = connection.connection.createStatement();){
+			
 			statement.executeUpdate(sql3);
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			// TODO Auto-generated catch block
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
 			
 		}
 		
-		System.out.println("Your account has been created!");
-		System.out.println("----------------------------------------");
+		System.out.println("\nYour account has been created!\n");
+		System.out.println("----------------------------------------\n");
 		return newUser;
 	}
 
@@ -79,14 +98,14 @@ public class UserDao implements UserDaoInterface{
 		
 		final String sql = "Select * FROM users WHERE username = '"+username+"';";
 		
-		DatabaseConnection connection = new DatabaseConnection();
-		
-		try(Statement statement = connection.connection.createStatement();){
+		try(Statement statement = this.connection.connection.createStatement();){
 			ResultSet set = statement.executeQuery(sql);
 			if(set.next()) {
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
+			
 		}
 		
 		
@@ -95,13 +114,30 @@ public class UserDao implements UserDaoInterface{
 
 	@Override
 	public User updatedUser(User newUser) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public User deleteUser(User newUser) {
-		// TODO Auto-generated method stub
+		System.out.println("----------------------------------------\n");
+		
+		final String sql0 = "DELETE from customer_status where username = '"+newUser.getUsername()+"';";
+		final String sql1 = "DELETE from customers where user_id = '"+newUser.getUser_id()+"';";
+		final String sql2 = "DELETE from users where user_id = '"+newUser.getUser_id()+"';";
+		final String sql3 = "DELETE from user_types where user_id = '"+newUser.getUser_id()+"';";
+		final String finalSql = sql0 + sql1 + sql2 + sql3;
+		
+		try(Statement statement = connection.connection.createStatement();) {
+			statement.executeQuery(finalSql);
+			System.out.println("The account has been deleted!");
+			
+		}catch(SQLException e) {
+			consoleLogger.debug(e.getMessage());
+			fileLogger.debug(e.getMessage());
+		}
+		
+		System.out.println("----------------------------------------\n");
 		return null;
 	}
 

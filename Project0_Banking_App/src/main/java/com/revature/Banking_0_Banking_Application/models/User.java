@@ -2,7 +2,10 @@ package com.revature.Banking_0_Banking_Application.models;
 
 import java.util.Objects;
 import java.util.Random;
-import java.util.random.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.revature.Banking_0_Banking_Application.services.DatabaseConnection;
 
 public abstract class User {
@@ -15,8 +18,11 @@ public abstract class User {
 	protected String fname;
 	protected String lname;
 	protected int age;
+	protected String type;
 	protected DatabaseConnection connection;
 	protected Random r;
+	protected Logger consoleLogger;
+	protected Logger fileLogger;
 	
 	
 	
@@ -31,6 +37,8 @@ public abstract class User {
 		this.lname = lname;
 		this.age = age;
 		connection = new DatabaseConnection();
+		consoleLogger = LoggerFactory.getLogger("consoleLogger");
+		fileLogger = LoggerFactory.getLogger("fileLogger");
 		
 	}
 
@@ -123,6 +131,8 @@ public abstract class User {
 	public String toString() {
 		return "User [username=" + username + ", password=" + password + ", email=" + email + "]";
 	}
+
+	public abstract void mainDriver();
 
 	
 

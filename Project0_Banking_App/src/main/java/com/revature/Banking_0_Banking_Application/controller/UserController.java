@@ -6,8 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import com.revature.Banking_0_Banking_Application.models.Banking;
+import com.revature.Banking_0_Banking_Application.models.Admin;
 import com.revature.Banking_0_Banking_Application.models.Customer;
+import com.revature.Banking_0_Banking_Application.models.Employee;
 import com.revature.Banking_0_Banking_Application.models.User;
 import com.revature.Banking_0_Banking_Application.services.DatabaseConnection;
 import com.revature.Banking_0_Banking_Application.services.LoginService;
@@ -15,17 +16,13 @@ import com.revature.Banking_0_Banking_Application.services.LoginService;
 public class UserController implements UserInputInterface, LoginInterface{
 	
 	private Scanner sc;
-	private LoginService loginService;
 	private DatabaseConnection connection;
 	
 
 	public UserController(Scanner sc, LoginService loginService) {
 		super();
 		this.sc = new Scanner(System.in);
-		this.loginService = loginService;
 		connection = new DatabaseConnection();
-		
-		
 	}
 
 	
@@ -35,7 +32,7 @@ public class UserController implements UserInputInterface, LoginInterface{
 	
 	@Override
 	public User validateLogin(String username, String password) {
-		Customer user = null;
+		User user = null;
 		final String sql = "Select * FROM users WHERE username = '"+username+"' AND passw = '" +password+"';";
 		String lname, fname, usern, passw, email;
 		int age,id;
@@ -51,9 +48,19 @@ public class UserController implements UserInputInterface, LoginInterface{
 				age = set.getInt(5);
 				id = set.getInt(6);
 				email = set.getString(7);
-				user = new Customer(usern, passw, email, fname, lname, age, 0);
-				user.setUser_id(id);
-				return user;
+				if(id == 1) {
+					user = new Admin(usern, passw, email, fname, lname, age);
+					return user;
+				}else if(id == 2) {
+					user = new Employee(usern, passw, email, fname, lname, age);
+					return user;
+					
+				}else {
+					user = new Customer(usern, passw, email, fname, lname, age, 0);
+					user.setUser_id(id);
+					return user;
+				}
+				
 			}else {
 				return null;
 			}
@@ -61,7 +68,6 @@ public class UserController implements UserInputInterface, LoginInterface{
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 
@@ -77,20 +83,16 @@ public class UserController implements UserInputInterface, LoginInterface{
 		String username = sc.nextLine();
 		System.out.print("Enter Password: ");
 		String password = sc.nextLine();
-		Customer user = (Customer) validateLogin(username, password);
+		User user = validateLogin(username, password);
 		
 		if(user != null) {
-			System.out.println("\nWelcome back, "+user.getFname()+""+user.getLname()+"!");
+			System.out.println("\nWelcome back, "+user.getFname()+" "+user.getLname()+"!");
 			System.out.println("----------------------------------------\n");
-			user.bankingMain();
 			
+			user.mainDriver();
 		}else {
-			System.out.println("Failed login attempt: invalid password or username.\n");
+			System.out.println("\nFailed login attempt: invalid password or username.\n");
 			
 		}
-		
-		
 	}
-
-
 }

@@ -9,6 +9,8 @@ public interface UserDaoInterface {
 	
 	// C = Create
 	
+	Object consoleLogger = null;
+
 	User createdUser(User newUser);
 	
 	// R = Read 
